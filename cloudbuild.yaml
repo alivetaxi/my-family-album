@@ -23,14 +23,14 @@ steps:
         --source=. \
         --memory=256MB \
         --service-account=$_SERVICE_ACCOUNT \
-        --set-env-vars IMAGES_BUCKET="$_IMAGES_BUCKET",\
-                       FIREBASE_ADMIN_SECRET_NAME="$_FIREBASE_ADMIN_SECRET_NAME",\
-                       FIREBASE_PROJECT_ID="$_FIREBASE_PROJECT_ID",\
-                       ALLOWED_ORIGINS="$_ALLOWED_ORIGINS",\
-                       FIREBASE_API_KEY="$_FIREBASE_API_KEY",\
-                       FIREBASE_AUTH_DOMAIN="$_FIREBASE_AUTH_DOMAIN",\
-                       FIREBASE_APP_ID="$_FIREBASE_APP_ID",\
-                       API_BASE_URL="$_API_BASE_URL"
+        --set-env-vars "IMAGES_BUCKET=$_IMAGES_BUCKET,\
+                        FIREBASE_ADMIN_SECRET_NAME=$_FIREBASE_ADMIN_SECRET_NAME,\
+                        FIREBASE_PROJECT_ID=$_FIREBASE_PROJECT_ID,\
+                        ALLOWED_ORIGINS=$_ALLOWED_ORIGINS,\
+                        FIREBASE_API_KEY=$_FIREBASE_API_KEY,\
+                        FIREBASE_AUTH_DOMAIN=$_FIREBASE_AUTH_DOMAIN,\
+                        FIREBASE_APP_ID=$_FIREBASE_APP_ID,\
+                        API_BASE_URL=$_API_BASE_URL"
 
 # 2) Deploy frontend to Firebase Hosting
 - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
