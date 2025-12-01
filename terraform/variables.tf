@@ -32,42 +32,6 @@ variable "firebase_admin_key_file" {
   default     = ""
 }
 
-variable "functions_bucket" {
-  description = "GCS bucket name used to store function source archives. Must be globally unique."
-  type        = string
-  default     = ""
-}
-
-variable "function_name" {
-  description = "Cloud Function name"
-  type        = string
-  default     = "my-family-album-api"
-}
-
-variable "function_runtime" {
-  description = "Cloud Function runtime"
-  type        = string
-  default     = "python311"
-}
-
-variable "function_entry_point" {
-  description = "Function entry point (callable name)"
-  type        = string
-  default     = "main"
-}
-
-variable "function_source_dir" {
-  description = "Path to the function source directory relative to the repo root (used by archive)."
-  type        = string
-  default     = "../backend"
-}
-
-variable "function_env_vars" {
-  description = "Map of environment variables to set for the Cloud Function. Do not put secrets here; use Secret Manager."
-  type        = map(string)
-  default     = {}
-}
-
 variable "logs_bucket" {
   description = "GCS bucket name used to store cloudbuild logs. Must be globally unique."
   type        = string
