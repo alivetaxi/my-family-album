@@ -1,6 +1,9 @@
 # Cloud Build pipeline to provision infra (Terraform), package & deploy Cloud Function,
 # and optionally deploy frontend to Firebase Hosting.
 #
+
+logsBucket: "gs://$PROJECT_ID-cloudbuild-logs"
+
 steps:
 # 1) Retrieve terraform.tfvars from Secret Manager
 - name: gcr.io/cloud-builders/gcloud

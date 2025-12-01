@@ -67,3 +67,9 @@ variable "function_env_vars" {
   type        = map(string)
   default     = {}
 }
+
+variable "logs_bucket" {
+  description = "GCS bucket name used to store cloudbuild logs. Must be globally unique."
+  type        = string
+  default     = ""
+}

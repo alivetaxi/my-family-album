@@ -51,6 +51,13 @@ resource "google_storage_bucket" "functions_source" {
   force_destroy = true
 }
 
+resource "google_storage_bucket" "logs" {
+  name     = var.logs_bucket
+  location = var.region
+  uniform_bucket_level_access = true
+  force_destroy = true
+}
+
 resource "google_service_account" "functions_sa" {
   account_id   = "my-family-album-fn-sa"
   display_name = "Service account for Cloud Functions"
