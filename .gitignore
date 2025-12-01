@@ -1,0 +1,62 @@
+# Local env files
+.env
+.venv
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtualenv
+.venv/
+venv/
+ENV/
+env/
+
+# Editor/IDE
+.vscode/
+.idea/
+
+# Node
+node_modules/
+
+# Firebase / local
+.firebase/
+.firebaserc
+
+# Firebase Hosting build output
+frontend/build/
+frontend/dist/
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+.terraform/
+.terraform.lock.hcl
+terraform.tfvars
+terraform.tfvars.json
+
+# Service account / credential files (do NOT commit private keys)
+*-sa-key.json
+firebase-admin-*.json
+google-credentials.json
+google-application-credentials.json
+
+# Environment files
+.env
+.env.*
+
+# Python test / coverage
+.pytest_cache/
+.coverage
+
+# Misc
+.DS_Store
+Thumbs.db
+# Terraform generated archives
+/terraform/function-*.zip
+
+# Python cache
+__pycache__/
+*.py[cod]

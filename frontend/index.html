@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>My Family Album</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <!-- Firebase (compat) SDKs for simple global usage -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+    <script defer src="/app.js"></script>
+  </head>
+  <body>
+    <header>
+      <h1>My Family Album</h1>
+      <div id="auth">
+        <button id="login">Sign in with Google</button>
+        <button id="logout" style="display:none;">Sign out</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- Index: albums list -->
+      <section id="view-albums">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <h2>Albums</h2>
+          <div>
+            <button id="create-album-btn" style="display:none;">Create Album</button>
+          </div>
+        </div>
+        <div id="albums-list">Loading...</div>
+      </section>
+
+      <!-- Album page -->
+      <section id="view-album" style="display:none;">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <h2 id="album-title"></h2>
+          <div>
+            <button id="album-upload-btn" style="display:none;">Upload Photos</button>
+            <button id="album-delete-btn" style="display:none;">Delete Album</button>
+            <button id="back-to-albums">Back</button>
+          </div>
+        </div>
+        <div id="photos-list"></div>
+      </section>
+
+      <!-- Upload page -->
+      <section id="view-upload" style="display:none;">
+        <h2>Upload photos to <span id="upload-album-title"></span></h2>
+        <input type="file" id="upload-files" multiple />
+        <div>
+          <button id="upload-start-btn">Start Upload</button>
+          <button id="upload-cancel-btn">Cancel</button>
+        </div>
+        <div id="upload-status"></div>
+      </section>
+
+      <!-- Photo view modal/page -->
+      <section id="view-photo" style="display:none;">
+        <div>
+          <button id="photo-back-btn">Back to Album</button>
+          <button id="photo-edit-desc-btn" style="display:none;">Edit Description</button>
+          <button id="photo-delete-btn" style="display:none;">Delete Photo</button>
+        </div>
+        <div id="photo-area"></div>
+        <div id="photo-description"></div>
+      </section>
+
+      <!-- Simple dialog area -->
+      <div id="dialog" style="display:none; position:fixed; left:0; right:0; top:20%; margin:auto; max-width:600px; background:#fff; border:1px solid #ccc; padding:20px; z-index:9999;"></div>
+    </main>
+
+  </body>
+  </html>

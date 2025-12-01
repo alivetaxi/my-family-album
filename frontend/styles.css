@@ -1,0 +1,5 @@
+body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; margin: 20px; }
+header { display:flex; justify-content:space-between; align-items:center; }
+.album-item { border:1px solid #ddd; padding:10px; margin:8px 0; cursor:pointer; }
+.photo-item { display:inline-block; margin:6px; }
+.photo-item img { max-width:150px; max-height:150px; display:block; }
