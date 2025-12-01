@@ -14,7 +14,6 @@ steps:
     - '-c'
     - |
       gcloud functions deploy my-family-album-api \
-        --region $REGION \
         --project $PROJECT_ID \
         --no-allow-unauthenticated \
         --entry-point main \
