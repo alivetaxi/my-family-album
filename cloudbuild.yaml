@@ -1,0 +1,36 @@
+# Cloud Build pipeline to provision infra (Terraform), package & deploy Cloud Function,
+# and optionally deploy frontend to Firebase Hosting.
+#
+steps:
+# 1) Retrieve terraform.tfvars from Secret Manager
+- name: gcr.io/cloud-builders/gcloud
+  id: 'Download terraform.tfvars'
+  entrypoint: 'bash'
+  args: ['-c', 'gcloud secrets versions access latest --secret="terraform-tfvars" > terraform/terraform.tfvars']
+
+# 2) Run terraform init
+- name: 'hashicorp/terraform:1.5.7'
+  id: 'terraform-init'
+  dir: 'terraform'
+  entrypoint: 'sh'
+  args: ['-c', 'terraform init -input=false']
+
+# 3) Run terraform apply (non-interactive)
+- name: 'hashicorp/terraform:1.5.7'
+  id: 'terraform-apply'
+  dir: 'terraform'
+  entrypoint: 'sh'
+  args: ['-c', 'terraform apply -auto-approve']
+
+# 4) Install Firebase CLI
+- name: node:20
+  id: 'Install Firebase CLI'
+  entrypoint: 'bash'
+  args: ['-c', 'npm install -g firebase-tools']
+
+# 5) Deploy frontend to Firebase Hosting
+- name: node:20
+  id: 'Firebase Deploy Hosting'
+  dir: 'frontend'
+  entrypoint: 'bash'
+  args: ['-c', 'firebase deploy --only hosting --project $PROJECT_ID']
