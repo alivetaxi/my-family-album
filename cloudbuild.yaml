@@ -22,7 +22,6 @@ steps:
       gcloud functions deploy my-family-album-api \
         --region $_REGION \
         --project $PROJECT_ID \
-        --no-allow-unauthenticated \
         --entry-point main \
         --gen2 \
         --runtime python311 \
@@ -32,8 +31,14 @@ steps:
         --service-account=$_SERVICE_ACCOUNT \
         --env-vars-file function-env-vars.yaml
 
-# 3) Deploy frontend to Firebase Hosting
-- name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+# 3) Install Firebase CLI
+- name: node:20
+  id: 'Install Firebase CLI'
+  entrypoint: 'bash'
+  args: ['-c', 'npm install -g firebase-tools']
+
+# 4) Deploy frontend to Firebase Hosting
+- name: node:20
   id: 'Firebase Deploy Hosting'
   dir: 'frontend'
   entrypoint: 'bash'
