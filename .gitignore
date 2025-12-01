@@ -44,8 +44,7 @@ google-credentials.json
 google-application-credentials.json
 
 # Environment files
-.env
-.env.*
+function-env-vars.yaml
 
 # Python test / coverage
 .pytest_cache/

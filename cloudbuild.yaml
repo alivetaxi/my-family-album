@@ -5,7 +5,13 @@
 logsBucket: "gs://$PROJECT_ID-cloudbuild-logs"
 
 steps:
-# 1) Deploy Cloud Functions
+# 1) Retrieve function-env-vars from Secret Manager
+- name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+  id: 'Download function-env-vars'
+  entrypoint: 'bash'
+  args: ['-c', 'gcloud secrets versions access latest --secret="function-env-vars" > backend/function-env-vars.yaml']
+
+# 2) Deploy Cloud Functions
 - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
   id: 'Deploy Cloud Functions'
   dir: 'backend'
@@ -23,16 +29,9 @@ steps:
         --source=. \
         --memory=256MB \
         --service-account=$_SERVICE_ACCOUNT \
-        --set-env-vars "IMAGES_BUCKET=$_IMAGES_BUCKET,\
-                        FIREBASE_ADMIN_SECRET_NAME=$_FIREBASE_ADMIN_SECRET_NAME,\
-                        FIREBASE_PROJECT_ID=$_FIREBASE_PROJECT_ID,\
-                        ALLOWED_ORIGINS=$_ALLOWED_ORIGINS,\
-                        FIREBASE_API_KEY=$_FIREBASE_API_KEY,\
-                        FIREBASE_AUTH_DOMAIN=$_FIREBASE_AUTH_DOMAIN,\
-                        FIREBASE_APP_ID=$_FIREBASE_APP_ID,\
-                        API_BASE_URL=$_API_BASE_URL"
+        --env-vars-file function-env-vars.yaml
 
-# 2) Deploy frontend to Firebase Hosting
+# 3) Deploy frontend to Firebase Hosting
 - name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
   id: 'Firebase Deploy Hosting'
   dir: 'frontend'
