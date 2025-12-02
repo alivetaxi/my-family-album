@@ -134,6 +134,7 @@ def api(request):
         for d in docs:
             data = d.to_dict()
             data["id"] = d.id
+            data["created_at"] = data["created_at"].isoformat()
             # try to include a cover photo (first photo)
             photos = db.collection("albums").document(d.id).collection("photos").order_by("created_at", direction=Query.DESCENDING).limit(1).stream()
             cover = None
