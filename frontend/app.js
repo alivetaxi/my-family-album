@@ -7,7 +7,7 @@ async function initFirebaseClient() {
   try {
     // First, we need to fetch config from a known endpoint to get API_BASE_URL
     // Try multiple possible URLs (same domain or localhost)
-    let configUrl = '/config';
+    let configUrl = '/api/config';
     try {
       let resp = await fetch(configUrl);
       if (!resp.ok) throw new Error('Not found');
@@ -109,8 +109,7 @@ async function apiFetch(path, opts = {}) {
   opts.headers = opts.headers || {};
   opts.headers["Content-Type"] = opts.headers["Content-Type"] || "application/json";
   if (token) opts.headers["Authorization"] = `Bearer ${token}`;
-  const fullUrl = `${API_BASE_URL}${path}`;
-  const resp = await fetch(fullUrl, opts);
+  const resp = await fetch(path, opts);
   if (!resp.ok) {
     const text = await resp.text();
     throw new Error(`API error: ${resp.status} ${text}`);
