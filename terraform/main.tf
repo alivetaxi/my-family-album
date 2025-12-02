@@ -67,6 +67,18 @@ resource "google_project_iam_member" "functions_storage_admin" {
   member  = "serviceAccount:${google_service_account.functions_sa.email}"
 }
 
+resource "google_project_iam_member" "functions_sa_user" {
+  project = var.project_id
+  role    = "roles/iam.serviceAccountUser"
+  member  = "serviceAccount:${google_service_account.functions_sa.email}"
+}
+
+resource "google_project_iam_member" "functions_sa_token_creator" {
+  project = var.project_id
+  role    = "roles/iam.serviceAccountTokenCreator"
+  member  = "serviceAccount:${google_service_account.functions_sa.email}"
+}
+
 // Create Firestore database in Native mode
 resource "google_firestore_database" "default" {
   project     = var.project_id
