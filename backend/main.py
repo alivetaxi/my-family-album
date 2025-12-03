@@ -35,7 +35,9 @@ init_firebase()
 db = firestore.client()
 credentials, project = google.auth.default()
 storage_client = storage.Client(credentials=credentials, project=project)
-print(f"INFO: GCS Client initialized using SA: {credentials.service_account_email}")
+print(f"credentials.service_account_email: {credentials.service_account_email}")
+print(f"credentials._signer.email: {credentials._signer.email}")
+print(f"os.environ.get('GOOGLE_IDENTITY'): {os.environ.get('GOOGLE_IDENTITY')}")
 
 
 def _get_cors_origin(request):
