@@ -22,6 +22,7 @@ steps:
       gcloud functions deploy my-family-album-api \
         --region $_REGION \
         --project $PROJECT_ID \
+        --gen2 \
         --allow-unauthenticated \
         --entry-point main \
         --runtime python311 \
@@ -29,6 +30,7 @@ steps:
         --source=. \
         --memory=256MB \
         --service-account=$_SERVICE_ACCOUNT \
+        --run-service-account=$_SERVICE_ACCOUNT \
         --env-vars-file function-env-vars.yaml
 
 # 3) Deploy frontend to Firebase Hosting
