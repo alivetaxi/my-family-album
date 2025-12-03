@@ -1,6 +1,7 @@
 import os
 import json
 from datetime import timedelta
+import logging
 
 from google.cloud import storage, secretmanager
 from google.cloud.firestore_v1 import SERVER_TIMESTAMP, Query
@@ -37,6 +38,7 @@ def init_service_account_info():
             name = f"projects/{project}/secrets/{secret_name}/versions/latest"
             resp = client.access_secret_version(request={"name": name})
             key_json = resp.payload.data.decode("utf-8")
+            logging.info(f"Service account info {secret_name} loaded from Secret Manager: {len(key_json)} bytes")
             return json.loads(key_json)
         except Exception:
             pass
@@ -47,6 +49,7 @@ init_firebase()
 db = firestore.client()
 # Initialize storage client
 sa_info = init_service_account_info()
+
 storage_client = storage.Client.from_service_account_info(sa_info)
 
 
