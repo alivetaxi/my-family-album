@@ -219,7 +219,12 @@ def api(request):
         for fname in filenames:
             blob_path = f"albums/{payload['album_id']}/{user.get('uid')}/{fname}"
             blob = bucket.blob(blob_path)
-            url = blob.generate_signed_url(expiration=timedelta(minutes=15), method="PUT", version="v4", content_type=payload.get("content_type", "application/octet-stream"))
+            url = blob.generate_signed_url(
+                expiration=timedelta(minutes=15),
+                method="PUT",
+                version="v4",
+                content_type=payload.get("content_type", "application/octet-stream"),
+                credentials=storage_client._credentials)
             results.append({"filename": fname, "upload_url": url, "blob_path": blob_path})
         headers = {"Content-Type": "application/json"}
         headers.update(_cors_headers(request))
