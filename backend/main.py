@@ -36,7 +36,6 @@ db = firestore.client()
 credentials, project = google.auth.default()
 storage_client = storage.Client(credentials=credentials, project=project)
 print(f"credentials.service_account_email: {credentials.service_account_email}")
-print(f"credentials._signer.email: {credentials._signer.email}")
 print(f"os.environ.get('GOOGLE_IDENTITY'): {os.environ.get('GOOGLE_IDENTITY')}")
 
 
