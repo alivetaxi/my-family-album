@@ -1,18 +1,13 @@
 // Frontend JS: Firebase Auth (Google Sign-In) + basic album/photo flows.
 // This script requests runtime client config from the backend Cloud Function and initializes Firebase.
 
-let API_BASE_URL = '';  // Will be set by initFirebaseClient()
-
 async function initFirebaseClient() {
   try {
-    // First, we need to fetch config from a known endpoint to get API_BASE_URL
-    // Try multiple possible URLs (same domain or localhost)
     let configUrl = '/api/config';
     try {
       let resp = await fetch(configUrl);
       if (!resp.ok) throw new Error('Not found');
       const cfg = await resp.json();
-      API_BASE_URL = cfg.apiBaseUrl || '';
       firebase.initializeApp(cfg);
       return;
     } catch (e1) {
@@ -21,7 +16,6 @@ async function initFirebaseClient() {
       const resp = await fetch(configUrl);
       if (!resp.ok) throw new Error('Could not load config');
       const cfg = await resp.json();
-      API_BASE_URL = cfg.apiBaseUrl || '';
       firebase.initializeApp(cfg);
       return;
     }

@@ -119,8 +119,7 @@ def api(request):
             "apiKey": os.environ.get("FIREBASE_API_KEY"),
             "authDomain": os.environ.get("FIREBASE_AUTH_DOMAIN"),
             "projectId": os.environ.get("FIREBASE_PROJECT_ID"),
-            "appId": os.environ.get("FIREBASE_APP_ID"),
-            "apiBaseUrl": os.environ.get("API_BASE_URL"),
+            "appId": os.environ.get("FIREBASE_APP_ID")
         }
         headers = {"Content-Type": "application/json"}
         headers.update(_cors_headers(request))

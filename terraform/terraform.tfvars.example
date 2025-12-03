@@ -5,28 +5,7 @@ project_id = "REPLACE_WITH_PROJECT_ID"
 region     = "asia-east1"
 
 images_bucket = "REPLACE_WITH_UNIQUE_IMAGES_BUCKET"
-functions_bucket = "REPLACE_WITH_UNIQUE_FUNCTIONS_BUCKET"
+logs_bucket = "REPLACE_WITH_UNIQUE_LOGS_BUCKET"
 
 # Path to Firebase admin service account JSON (local only, not committed)
 firebase_admin_key_file = "~/firebase-admin-sa-key.json"
-
-# Cloud Function configuration
-function_name       = "my-family-album-api"
-function_runtime    = "python311"
-function_entry_point = "main"
-
-# Environment variables for the Cloud Function
-function_env_vars = {
-  IMAGES_BUCKET            = "REPLACE_WITH_IMAGES_BUCKET"
-  FIREBASE_ADMIN_SECRET_NAME = "firebase-admin-key"
-  FIREBASE_PROJECT_ID      = "REPLACE_WITH_PROJECT_ID"
-  ALLOWED_ORIGINS          = "https://your-domain.com,https://your-other-domain.firebaseapp.com,http://localhost:5000"
-
-  # Firebase client config (non-sensitive)
-  FIREBASE_API_KEY         = "REPLACE_WITH_FIREBASE_API_KEY"
-  FIREBASE_AUTH_DOMAIN     = "REPLACE_WITH_FIREBASE_AUTH_DOMAIN"
-  FIREBASE_APP_ID          = "REPLACE_WITH_FIREBASE_APP_ID"
-
-  # Cloud Function base URL (set after function deploy) - optional
-  API_BASE_URL             = "https://REGION-PROJECT.cloudfunctions.net/my-family-album-api"
-}
