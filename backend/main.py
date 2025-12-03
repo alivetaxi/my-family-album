@@ -41,16 +41,14 @@ def init_service_account_info():
             logging.info(f"Service account info {secret_name} loaded from Secret Manager: {len(key_json)} bytes")
             return json.loads(key_json)
         except Exception:
-            pass
-    return None
+            logging.exception("Failed to load service account info from Secret Manager")
+            raise
 
 
 init_firebase()
 db = firestore.client()
 # Initialize storage client
-sa_info = init_service_account_info()
-
-storage_client = storage.Client.from_service_account_info(sa_info)
+storage_client = storage.Client.from_service_account_info(init_service_account_info())
 
 
 def _get_cors_origin(request):
@@ -226,8 +224,7 @@ def api(request):
                 expiration=timedelta(minutes=15),
                 method="PUT",
                 version="v4",
-                content_type=payload.get("content_type", "application/octet-stream"),
-                credentials=storage_client._credentials)
+                content_type=payload.get("content_type", "application/octet-stream"))
             results.append({"filename": fname, "upload_url": url, "blob_path": blob_path})
         headers = {"Content-Type": "application/json"}
         headers.update(_cors_headers(request))
@@ -371,4 +368,3 @@ def api(request):
 # For Google Cloud Functions entrypoint compatibility
 def main(request):
     return api(request)
-
