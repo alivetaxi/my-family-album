@@ -7,6 +7,7 @@ from google.cloud import storage, secretmanager
 from google.cloud.firestore_v1 import SERVER_TIMESTAMP, Query
 from firebase_admin import auth, firestore, initialize_app, credentials
 import firebase_admin
+import google.auth
 
 
 def init_firebase():
@@ -29,26 +30,12 @@ def init_firebase():
             pass
     initialize_app()
 
-def init_service_account_info():
-    secret_name = os.environ.get("SERVICE_ACCOUNT_SECRET_NAME")
-    project = os.environ.get("GCP_PROJECT") or os.environ.get("GOOGLE_CLOUD_PROJECT")
-    if secret_name and project:
-        try:
-            client = secretmanager.SecretManagerServiceClient()
-            name = f"projects/{project}/secrets/{secret_name}/versions/latest"
-            resp = client.access_secret_version(request={"name": name})
-            key_json = resp.payload.data.decode("utf-8")
-            logging.info(f"Service account info {secret_name} loaded from Secret Manager: {len(key_json)} bytes")
-            return json.loads(key_json)
-        except Exception:
-            logging.exception("Failed to load service account info from Secret Manager")
-            raise
-
 
 init_firebase()
 db = firestore.client()
-# Initialize storage client
-storage_client = storage.Client.from_service_account_info(init_service_account_info())
+credentials, project = google.auth.default()
+storage_client = storage.Client(credentials=credentials, project=project)
+print(f"INFO: GCS Client initialized using SA: {credentials.service_account_email}")
 
 
 def _get_cors_origin(request):
