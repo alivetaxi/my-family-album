@@ -7,9 +7,6 @@ from google.cloud.firestore_v1 import SERVER_TIMESTAMP, Query
 from firebase_admin import auth, firestore, initialize_app, credentials
 import firebase_admin
 
-# Initialize storage client
-storage_client = storage.Client()
-
 
 def init_firebase():
     # Initialize firebase_admin. Prefer using Secret Manager if FIREBASE_ADMIN_SECRET_NAME provided.
@@ -31,9 +28,26 @@ def init_firebase():
             pass
     initialize_app()
 
+def init_service_account_info():
+    secret_name = os.environ.get("SERVICE_ACCOUNT_SECRET_NAME")
+    project = os.environ.get("GCP_PROJECT") or os.environ.get("GOOGLE_CLOUD_PROJECT")
+    if secret_name and project:
+        try:
+            client = secretmanager.SecretManagerServiceClient()
+            name = f"projects/{project}/secrets/{secret_name}/versions/latest"
+            resp = client.access_secret_version(request={"name": name})
+            key_json = resp.payload.data.decode("utf-8")
+            return json.loads(key_json)
+        except Exception:
+            pass
+    return None
+
 
 init_firebase()
 db = firestore.client()
+# Initialize storage client
+sa_info = init_service_account_info()
+storage_client = storage.Client.from_service_account_info(sa_info)
 
 
 def _get_cors_origin(request):
