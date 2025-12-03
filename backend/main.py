@@ -8,8 +8,7 @@ from firebase_admin import auth, firestore, initialize_app, credentials
 import firebase_admin
 
 # Initialize storage client
-project = os.environ.get("GCP_PROJECT") or os.environ.get("GOOGLE_CLOUD_PROJECT")
-storage_client = storage.Client(project=project)
+storage_client = storage.Client()
 
 
 def init_firebase():
@@ -17,6 +16,7 @@ def init_firebase():
     if len(firebase_admin._apps) > 0:
         return
     secret_name = os.environ.get("FIREBASE_ADMIN_SECRET_NAME")
+    project = os.environ.get("GCP_PROJECT") or os.environ.get("GOOGLE_CLOUD_PROJECT")
     if secret_name and project:
         try:
             client = secretmanager.SecretManagerServiceClient()

@@ -24,13 +24,11 @@ steps:
         --project $PROJECT_ID \
         --allow-unauthenticated \
         --entry-point main \
-        --gen2 \
         --runtime python311 \
         --trigger-http \
         --source=. \
         --memory=256MB \
         --service-account=$_SERVICE_ACCOUNT \
-        --run-service-account=$_SERVICE_ACCOUNT \
         --env-vars-file function-env-vars.yaml
 
 # 3) Deploy frontend to Firebase Hosting
