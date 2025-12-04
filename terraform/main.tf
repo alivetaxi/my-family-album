@@ -35,6 +35,10 @@ resource "google_project_service" "iam" {
   service = "iam.googleapis.com"
 }
 
+resource "google_project_service" "iamcredentials" {
+  service = "iamcredentials.googleapis.com"
+}
+
 resource "google_storage_bucket" "images" {
   name     = var.images_bucket
   location = var.region
@@ -77,6 +81,12 @@ resource "google_project_iam_member" "functions_sa_token_creator" {
   project = var.project_id
   role    = "roles/iam.serviceAccountTokenCreator"
   member  = "serviceAccount:${google_service_account.functions_sa.email}"
+}
+
+resource "google_service_account_iam_member" "functions_sa_token_creator_self_binding" {
+  service_account_id = google_service_account.functions_sa.id
+  role = "roles/iam.serviceAccountTokenCreator"
+  member = "serviceAccount:${google_service_account.functions_sa.email}"
 }
 
 // Create Firestore database in Native mode

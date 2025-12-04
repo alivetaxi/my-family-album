@@ -1,13 +1,13 @@
 import os
 import json
 from datetime import timedelta
-import logging
 
+from google.auth.transport import requests
+from google.auth import default, compute_engine
 from google.cloud import storage, secretmanager
 from google.cloud.firestore_v1 import SERVER_TIMESTAMP, Query
 from firebase_admin import auth, firestore, initialize_app, credentials
 import firebase_admin
-import google.auth
 
 
 def init_firebase():
@@ -33,10 +33,7 @@ def init_firebase():
 
 init_firebase()
 db = firestore.client()
-credentials, project = google.auth.default()
-storage_client = storage.Client(credentials=credentials, project=project)
-print(f"credentials.service_account_email: {credentials.service_account_email}")
-print(f"os.environ.get('GOOGLE_IDENTITY'): {os.environ.get('GOOGLE_IDENTITY')}")
+storage_client = storage.Client()
 
 
 def _get_cors_origin(request):
@@ -208,11 +205,20 @@ def api(request):
         for fname in filenames:
             blob_path = f"albums/{payload['album_id']}/{user.get('uid')}/{fname}"
             blob = bucket.blob(blob_path)
+            default_credentials, _ = default()
+            auth_request = requests.Request()
+            default_credentials.refresh(auth_request)
+            signing_credentials = compute_engine.IDTokenCredentials(
+                auth_request,
+                "",
+                service_account_email=default_credentials.service_account_email
+            )
             url = blob.generate_signed_url(
                 expiration=timedelta(minutes=15),
                 method="PUT",
                 version="v4",
-                content_type=payload.get("content_type", "application/octet-stream"))
+                content_type=payload.get("content_type", "application/octet-stream"),
+                credentials=signing_credentials)
             results.append({"filename": fname, "upload_url": url, "blob_path": blob_path})
         headers = {"Content-Type": "application/json"}
         headers.update(_cors_headers(request))
