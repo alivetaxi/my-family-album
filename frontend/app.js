@@ -209,7 +209,7 @@ uploadStartBtn.addEventListener('click', async () => {
       const r = results[i];
       const f = files.find(x=>x.name===r.filename);
       uploadStatus.innerHTML += `<div>Uploading ${escapeHtml(r.filename)}...</div>`;
-      const putResp = await fetch(r.upload_url, {method:'PUT', body: f});
+      const putResp = await fetch(r.upload_url, {method:'PUT', headers: {'Content-Type': f.type}, body: f});
       if (!putResp.ok) throw new Error('Upload failed for '+r.filename);
       // register
       await apiFetch('/api/photos', {method:'POST', body: JSON.stringify({album_id: currentAlbum.id, filename: r.filename, blob_path: r.blob_path, public_url: `https://storage.googleapis.com/${encodeURIComponent(r.blob_path)}`})});
