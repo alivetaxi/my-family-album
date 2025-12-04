@@ -44,6 +44,13 @@ resource "google_storage_bucket" "images" {
   location = var.region
   uniform_bucket_level_access = true
   force_destroy = true
+
+  cors {
+    origin = var.images_bucket_cors_origin
+    method = ["GET", "PUT", "POST", "HEAD", "OPTIONS"]
+    response_header = ["Content-Type", "x-goog-meta-*", "Access-Control-Allow-Origin"]
+    max_age_seconds = 3600
+  }
 }
 
 resource "google_storage_bucket" "logs" {

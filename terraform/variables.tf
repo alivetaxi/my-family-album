@@ -14,6 +14,11 @@ variable "images_bucket" {
   type        = string
 }
 
+variable "images_bucket_cors_origin" {
+  description = "CORS origin for the Cloud Storage bucket to store images"
+  type        = list(string)
+}
+
 variable "firebase_display_name" {
   description = "Optional display name for Firebase project registration"
   type        = string
