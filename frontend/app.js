@@ -200,13 +200,13 @@ uploadStartBtn.addEventListener('click', async () => {
   uploadStatus.innerHTML = '';
   try{
     const filenames = files.map(f=>f.name);
-    const gen = await apiFetch('/api/generate_upload_urls', {method:'POST', body: JSON.stringify({album_id: currentAlbum.id, filenames, content_type: ''})});
+    const gen = await apiFetch('/api/generate_upload_urls', {method:'POST', body: JSON.stringify({album_id: currentAlbum.id, filenames})});
     const results = gen.results;
     for (let i=0;i<results.length;i++){
       const r = results[i];
       const f = files.find(x=>x.name===r.filename);
       uploadStatus.innerHTML += `<div>Uploading ${escapeHtml(r.filename)}...</div>`;
-      const putResp = await fetch(r.upload_url, {method:'PUT', headers: {'Content-Type': f.type || 'application/octet-stream'}, body: f});
+      const putResp = await fetch(r.upload_url, {method:'PUT', body: f});
       if (!putResp.ok) throw new Error('Upload failed for '+r.filename);
       // register
       await apiFetch('/api/photos', {method:'POST', body: JSON.stringify({album_id: currentAlbum.id, filename: r.filename, blob_path: r.blob_path, public_url: `https://storage.googleapis.com/${encodeURIComponent(r.blob_path)}`})});
