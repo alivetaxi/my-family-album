@@ -190,19 +190,17 @@ def api(request):
         if not user:
             return _unauthorized()
         payload = request.get_json(silent=True)
-        if not payload or "album_id" not in payload or ("filenames" not in payload and "filename" not in payload):
-            return _bad_request("Missing album_id or filenames")
+        if not payload or "album_id" not in payload or "filename_types" not in payload:
+            return _bad_request("Missing album_id or filename_types")
         bucket_name = os.environ.get("IMAGES_BUCKET")
         if not bucket_name:
             return _bad_request("Server not configured: IMAGES_BUCKET")
         bucket = storage_client.bucket(bucket_name)
         results = []
-        filenames = []
-        if "filenames" in payload:
-            filenames = payload["filenames"]
-        else:
-            filenames = [payload["filename"]]
-        for fname in filenames:
+        filename_types = {}
+        if "filename_types" in payload:
+            filename_types = payload["filename_types"]
+        for fname, ftype in filename_types:
             blob_path = f"albums/{payload['album_id']}/{user.get('uid')}/{fname}"
             blob = bucket.blob(blob_path)
             default_credentials, _ = default()
@@ -217,6 +215,8 @@ def api(request):
                 expiration=timedelta(minutes=15),
                 method="PUT",
                 version="v4",
+                content_type=ftype,
+                headers={"Content-Type": ftype},
                 credentials=signing_credentials)
             results.append({"filename": fname, "upload_url": url, "blob_path": blob_path})
         headers = {"Content-Type": "application/json"}

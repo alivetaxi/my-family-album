@@ -199,8 +199,11 @@ uploadStartBtn.addEventListener('click', async () => {
   if (!files.length) return alert('Select files');
   uploadStatus.innerHTML = '';
   try{
-    const filenames = files.map(f=>f.name);
-    const gen = await apiFetch('/api/generate_upload_urls', {method:'POST', body: JSON.stringify({album_id: currentAlbum.id, filenames})});
+    const filename_types = files.reduce((acc, file) => {
+      acc[file.name] = file.type;
+      return acc;
+    }, {});;
+    const gen = await apiFetch('/api/generate_upload_urls', {method:'POST', body: JSON.stringify({album_id: currentAlbum.id, filename_types})});
     const results = gen.results;
     for (let i=0;i<results.length;i++){
       const r = results[i];
