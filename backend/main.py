@@ -215,8 +215,8 @@ def api(request):
                 expiration=timedelta(minutes=15),
                 method="PUT",
                 version="v4",
-                # content_type=ftype,
-                # headers={"Content-Type": ftype},
+                content_type=ftype,
+                headers={"Content-Type": ftype},
                 credentials=signing_credentials)
             results.append({"filename": fname, "upload_url": url, "blob_path": blob_path})
         headers = {"Content-Type": "application/json"}
