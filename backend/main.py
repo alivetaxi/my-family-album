@@ -179,6 +179,7 @@ def api(request):
         for d in docs:
             data = d.to_dict()
             data["id"] = d.id
+            data["created_at"] = data["created_at"].isoformat()
             items.append(data)
         headers = {"Content-Type": "application/json"}
         headers.update(_cors_headers(request))
