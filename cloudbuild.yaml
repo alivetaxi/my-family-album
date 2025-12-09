@@ -33,6 +33,26 @@ steps:
         --run-service-account=$_SERVICE_ACCOUNT \
         --env-vars-file function-env-vars.yaml
 
+- name: gcr.io/google.com/cloudsdktool/cloud-sdk:slim
+  id: 'Deploy Create Thumbnail Function'
+  dir: 'backend'
+  entrypoint: 'bash'
+  args:
+    - '-c'
+    - |
+      gcloud functions deploy create-thumbnail \
+        --region $_REGION \
+        --project $PROJECT_ID \
+        --gen2 \
+        --entry-point create_thumbnail \
+        --runtime python311 \
+        --trigger-event-filters="type=google.cloud.storage.object.v1.finalized" \
+        --trigger-event-filters="bucket=$_STORAGE_BUCKET" \
+        --source=. \
+        --memory=256MB \
+        --service-account=$_SERVICE_ACCOUNT \
+        --run-service-account=$_SERVICE_ACCOUNT
+
 # 3) Deploy frontend to Firebase Hosting
 - name: node:20
   id: 'Install Firebase CLI'
