@@ -202,7 +202,7 @@ def api(request):
         if "filename_types" in payload:
             filename_types = payload["filename_types"]
         for fname, ftype in filename_types.items():
-            blob_path = f"albums/{payload['album_id']}/{user.get('uid')}/{fname}"
+            blob_path = f"albums/{payload['album_id']}/{fname}"
             blob = bucket.blob(blob_path)
             default_credentials, _ = default()
             auth_request = requests.Request()

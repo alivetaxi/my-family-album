@@ -39,6 +39,10 @@ resource "google_project_service" "iamcredentials" {
   service = "iamcredentials.googleapis.com"
 }
 
+resource "google_project_service" "eventarc" {
+  service = "eventarc.googleapis.com"
+}
+
 resource "google_storage_bucket" "images" {
   name     = var.images_bucket
   location = var.region
@@ -74,7 +78,7 @@ resource "google_project_iam_member" "functions_datastore" {
 
 resource "google_project_iam_member" "functions_storage_admin" {
   project = var.project_id
-  role    = "roles/storage.objectAdmin"
+  role    = "roles/storage.admin"
   member  = "serviceAccount:${google_service_account.functions_sa.email}"
 }
 
